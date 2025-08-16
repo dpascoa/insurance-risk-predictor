@@ -8,7 +8,12 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_predict_risk(client):
+def test_health(client):
+    response = client.get('/health')
+    assert response.status_code == 200
+    assert json.loads(response.data) == {'status': 'healthy'}
+
+def test_predict_risk_valid(client):
     response = client.post('/predict_risk', data=json.dumps({
         'age': 30,
         'driving_experience_years': 5,
@@ -18,8 +23,11 @@ def test_predict_risk(client):
     assert response.status_code == 200
     data = json.loads(response.data)
     assert 'risk_score' in data
+    assert isinstance(data['risk_score'], float)
 
-def test_health(client):
-    response = client.get('/health')
-    assert response.status_code == 200
-    assert json.loads(response.data)['status'] == 'healthy'
+def test_predict_risk_invalid(client):
+    response = client.post('/predict_risk', data=json.dumps({
+        'age': 30
+    }), content_type='application/json')
+    assert response.status_code == 400
+    assert json.loads(response.data) == {'error': 'Missing required fields'}

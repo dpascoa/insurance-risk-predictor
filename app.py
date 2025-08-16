@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import xgboost as xgb
 from sklearn.model_selection import train_test_split
@@ -33,6 +33,14 @@ try:
 except Exception as e:
     logger.error(f"Model training failed: {str(e)}")
 
+# Store predictions in memory
+predictions = []
+
+@app.route('/', methods=['GET'])
+def home():
+    logger.info("Home page accessed")
+    return render_template('index.html', predictions=predictions)
+
 @app.route('/predict_risk', methods=['POST'])
 def predict_risk():
     try:
@@ -41,6 +49,7 @@ def predict_risk():
         logger.debug(f"Input data: {input_data}")
         if not input_data:
             logger.warning("No input data provided")
+            return jsonify({'error': 'No input data provided'}), 400
         required_fields = ['age', 'driving_experience_years', 'vehicle_type', 'past_accidents']
         if not all(field in input_data for field in required_fields):
             logger.warning("Missing required fields")
@@ -52,6 +61,14 @@ def predict_risk():
         df['vehicle_type'] = le.transform(df['vehicle_type'])
         prediction = model.predict(df)[0]
         logger.info(f"Prediction: {prediction}")
+        # Store prediction
+        predictions.append({
+            'age': input_data['age'],
+            'driving_experience_years': input_data['driving_experience_years'],
+            'vehicle_type': input_data['vehicle_type'],
+            'past_accidents': input_data['past_accidents'],
+            'risk_score': float(prediction)
+        })
         return jsonify({'risk_score': float(prediction)})
     except Exception as e:
         logger.error(f"Prediction failed: {str(e)}")
