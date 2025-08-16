@@ -1,6 +1,10 @@
 # Insurance Risk Predictor API
 
-A Flask-based API with an XGBoost model to predict driver insurance risk scores, featuring a modern web interface for user interaction. Built to demonstrate Python, microservices, machine learning, and Docker skills for Zego's backend engineering roles.
+A Flask-based API with an XGBoost model to predict driver insurance risk scores, featuring a modern web interface for user interaction. Built to demonstrate Python, microservices, machine learning, and Docker skills for backend engineering roles.
+
+<div align="center">
+  <img width="600" alt="image" src="https://github.com/user-attachments/assets/c5e1a3d6-8a26-44a6-b2bf-29e9126274df" />
+</div>
 
 ## Features
 - **API Endpoints**:
@@ -128,24 +132,3 @@ insurance-risk-predictor/
 - **Dependencies**:
   - Reinstall: `pip install -r requirements.txt`.
   - Rebuild Docker: `docker build -t insurance-risk-predictor .`.
-
-## For Zego Interview
-- **Demo**: Show the web interface (`http://localhost:5000/`) to input data and display results. Alternatively, run PowerShell/curl commands or pytest.
-- **Key Points**:
-  - Built a Flask microservice with XGBoost for insurance risk prediction.
-  - Added a modern web interface with a form, risk meter, and history table.
-  - Dockerized for scalability, tested with pytest, and CI-enabled.
-  - Debugged issues like PowerShell’s `curl` alias and empty responses.
-
-## Optional: Deploy to Heroku
-1. Install Heroku CLI: [heroku.com](https://devcenter.heroku.com/articles/heroku-cli).
-2. Create a `Procfile`:
-   ```bash
-   echo "web: python app.py" > Procfile
-   ```
-3. Deploy:
-   ```bash
-   heroku create
-   git push heroku main
-   ```
-4. Access the Heroku URL (e.g., `https://your-app-name.herokuapp.com/`).
